@@ -1,0 +1,75 @@
+#!/bin/bash
+
+while true; do
+    # Mostrar el menú de opciones
+    echo "===== MENU ====="
+    echo "1) Listar el contenido de un fichero (carpeta)"
+    echo "2) Crear un archivo de texto con una línea de texto"
+    echo "3) Comparar dos archivos de texto"
+    echo "4) Mostrar uso del comando awk"
+    echo "5) Mostrar uso del comando grep"
+    echo "6) Salir"
+    echo "================"
+    echo -n "Elija una opción: "
+    read opcion
+
+    case $opcion in
+        1)  # Listar el contenido de un fichero (carpeta)
+            echo -n "Ingrese la ruta absoluta al fichero (carpeta): "
+            read ruta
+            if [ -d "$ruta" ]; then
+                echo "Contenido del directorio $ruta:"
+                ls -l "$ruta"
+            else
+                echo "El directorio no existe."
+            fi
+            ;;
+        
+        2)  # Crear un archivo de texto con una línea de texto
+            echo -n "Ingrese la cadena de texto a almacenar en el archivo: "
+            read texto
+            echo "$texto" > archivo_texto.txt
+            echo "El texto ha sido guardado en archivo_texto.txt."
+            ;;
+
+        3)  # Comparar dos archivos de texto
+            echo -n "Ingrese la ruta al primer archivo: "
+            read archivo1
+            echo -n "Ingrese la ruta al segundo archivo: "
+            read archivo2
+            if [ -f "$archivo1" ] && [ -f "$archivo2" ]; then
+                diff "$archivo1" "$archivo2" > /dev/null
+                if [ $? -eq 0 ]; then
+                    echo "Los archivos son idénticos."
+                else
+                    echo "Los archivos son diferentes."
+                    diff "$archivo1" "$archivo2"
+                fi
+            else
+                echo "Uno o ambos archivos no existen."
+            fi
+            ;;
+        
+        4)  # Mostrar uso del comando awk
+            echo "Ejemplo del comando awk para imprimir la primera columna de un archivo:"
+            echo "Contenido del archivo /etc/passwd:"
+            awk -F: '{ print $1 }' /etc/passwd
+            ;;
+
+        5)  # Mostrar uso del comando grep
+            echo "Ejemplo del comando grep para buscar la palabra 'root' en /etc/passwd:"
+            grep "root" /etc/passwd
+            ;;
+
+        6)  # Salir
+            echo "Saliendo del script..."
+            break
+            ;;
+        
+        *)  # Opción no válida
+            echo "Opción no válida, por favor intente de nuevo."
+            ;;
+    esac
+
+    echo
+done
